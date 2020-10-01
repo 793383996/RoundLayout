@@ -1,32 +1,20 @@
 同事写的圆角Layout处理，因为CardView处理有闪白屏和圆角毛边现象
 
-    import android.content.Context;
-    import android.graphics.Canvas;
-    import android.graphics.Paint;
-    import android.graphics.Path;
-    import android.graphics.PorterDuff;
-    import android.graphics.PorterDuffXfermode;
-    import android.graphics.RectF;
-    import android.os.Build;
-    import android.support.annotation.NonNull;
-    import android.support.annotation.Nullable;
-    import android.util.AttributeSet;
-    import android.widget.FrameLayout;
+            <declare-styleable name="RoundFrameLayout">
+                <attr name="Round" format="dimension" />
+            </declare-styleable>
 
-    import static android.os.Build.VERSION_CODES.P;
-
-
-
-    public class RoundFrameLayout extends FrameLayout {
-        private float mRadius = 50f;
-
+        public class RoundFrameLayout extends FrameLayout {
         private final Path mPath;
         private final Paint mPaint;
         private final RectF mRectF;
         private final boolean isClipBackground;
+        private float mRadius;
 
+        @Keep
         public RoundFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
             super(context, attrs, 0);
+
             isClipBackground = true;
 
             mPath = new Path();
@@ -34,6 +22,11 @@
             mRectF = new RectF();
 
             mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+
+            TypedArray array = context.obtainStyledAttributes(attrs,
+                    R.styleable.RoundFrameLayout, 0, 0);
+            mRadius = array.getDimension(R.styleable.RoundFrameLayout_Round, 50f);
+            array.recycle();
         }
 
         public void setRadius(float radius) {
@@ -41,12 +34,14 @@
             postInvalidate();
         }
 
+        @Keep
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
             mRectF.set(0, 0, w, h);
         }
 
+        @Keep
         @Override
         public void draw(Canvas canvas) {
             super.draw(canvas);
@@ -57,6 +52,7 @@
             }
         }
 
+        @Keep
         @Override
         protected void dispatchDraw(Canvas canvas) {
             if (Build.VERSION.SDK_INT >= P) {
@@ -109,5 +105,6 @@
         }
 
     }
+
 
 
