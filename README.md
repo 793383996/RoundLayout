@@ -1,4 +1,4 @@
-package com.tencent.wecar.aiboard.card.view;
+同事写的圆角Layout处理，因为CardView处理有闪白屏和圆角毛边现象
 
 import android.content.Context;
 import android.graphics.Canvas;
